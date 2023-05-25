@@ -13,11 +13,6 @@ while run do
         term.setBackgroundColour(2^i)
         print(loadingStr)
         if i==15 then
-            --if loadingStr=="£££ WIN BIG £££" then
-            --    loadingStr="£ £ £ WIN BIG £ £ £"
-            --else
-            --    loadingStr="£££ WIN BIG £££"
-            --end
             i=0
         end
     end
