@@ -5,7 +5,7 @@ local triesLeft = 5
 
 while userInput ~= adminPassword do
     print("Enter Employee Password")
-    userInput = read()
+    userInput = read("*")
     if userInput == employeePassword then
         print("Correct Password!")
         redstone.setOutput("left", true)
