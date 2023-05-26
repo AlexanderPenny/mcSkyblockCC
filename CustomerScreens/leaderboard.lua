@@ -27,7 +27,9 @@ local function bubbleSort()
         local swapped = false
         for i = 1, n - 1 do
             if leaderboardArray[2][i] > leaderboardArray[2][i + 1] then
-                leaderboardArray[i], leaderboardArray[i] = leaderboardArray[i + 1], leaderboardArray[i]
+                leaderboardArray[1][i], leaderboardArray[1][i + 1] = leaderboardArray[1][i + 1], leaderboardArray[1][i]
+                leaderboardArray[2][i], leaderboardArray[2][i + 1] = leaderboardArray[2][i + 1], leaderboardArray[2][i]
+                leaderboardArray[3][i], leaderboardArray[3][i + 1] = leaderboardArray[3][i + 1], leaderboardArray[3][i]
                 swapped = true
             end
         end
@@ -48,7 +50,7 @@ local function drawScreen()
 
     --leaderboard.setTextScale(3)
     for i = 1, n do
-        leaderboard.setCursorPos(1, i+1)
+        leaderboard.setCursorPos(1, i+2)
         leaderboard.write(leaderboardArray[3][i] .. ": " .. leaderboardArray[2][i])
     end
 
