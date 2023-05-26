@@ -1,5 +1,5 @@
 -------------declarations of variables-------------
-local leaderboard = peripheral.wrap("monitor_0")
+local leaderboard = peripheral.wrap("monitor_2")
 local leaderboardArray = {
     {"CHz01G", "FeR21l", "mNE48r", "QNz23f", "OmX901", "PlK51e", "YrT42P"},
     {0,0,0,0,0,0,0},
@@ -12,15 +12,9 @@ local n = #leaderboardArray[1]
 rednet.open("left")
 
 for i = 1, n do
-    local dataFile = fs.open(leaderboardArray[1][i] ,"r")
-    if dataFile then  -- Check if the file was opened successfully
-        rednet.send(5, leaderboardArray[1][i], "Read")
-        local id, message = rednet.receive()
-        leaderboardArray[2][i] = message
-        dataFile.close()
-    else
-        error("Failed to open file: " .. leaderboardArray[1][i] .. ".txt")
-    end
+    rednet.send(5, leaderboardArray[1][i], "Read")
+    local id, message = rednet.receive()
+    leaderboardArray[2][i] = message
 end
 
 rednet.close("left")
@@ -33,7 +27,7 @@ local function bubbleSort()
         local swapped = false
         for i = 1, n - 1 do
             if leaderboardArray[2][i] > leaderboardArray[2][i + 1] then
-                leaderboardArray[2][i], leaderboardArray[2][i + 1] = leaderboardArray[2][i + 1], leaderboardArray[2][i]
+                leaderboardArray[i], leaderboardArray[i] = leaderboardArray[i + 1], leaderboardArray[i]
                 swapped = true
             end
         end
@@ -46,12 +40,15 @@ local function drawScreen()
     leaderboard.clear()
     local n = #leaderboardArray[1]
 
-    leaderboard.setTextScale(5)
-    leaderboard.write("Richest Gamblers")
-    leaderboard.write("")
+    leaderboard.setBackgroundColour(colors.black)
+    leaderboard.setCursorPos(1,1)
 
-    leaderboard.setTextScale(3)
+    leaderboard.setTextScale(2)
+    leaderboard.write("Richest Gamblers")
+
+    --leaderboard.setTextScale(3)
     for i = 1, n do
+        leaderboard.setCursorPos(1, i+1)
         leaderboard.write(leaderboardArray[3][i] .. ": " .. leaderboardArray[2][i])
     end
 
