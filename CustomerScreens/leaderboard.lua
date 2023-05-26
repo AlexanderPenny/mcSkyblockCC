@@ -14,7 +14,7 @@ rednet.open("left")
 for i = 1, n do
     rednet.send(5, leaderboardArray[1][i], "Read")
     local id, message = rednet.receive()
-    leaderboardArray[2][i] = message
+    leaderboardArray[2][i] = tonumber(message)
 end
 
 rednet.close("left")
@@ -26,7 +26,7 @@ local function bubbleSort()
     repeat
         local swapped = false
         for i = 1, n - 1 do
-            if leaderboardArray[2][i] > leaderboardArray[2][i + 1] then
+            if leaderboardArray[2][i] < leaderboardArray[2][i + 1] then
                 leaderboardArray[1][i], leaderboardArray[1][i + 1] = leaderboardArray[1][i + 1], leaderboardArray[1][i]
                 leaderboardArray[2][i], leaderboardArray[2][i + 1] = leaderboardArray[2][i + 1], leaderboardArray[2][i]
                 leaderboardArray[3][i], leaderboardArray[3][i + 1] = leaderboardArray[3][i + 1], leaderboardArray[3][i]
