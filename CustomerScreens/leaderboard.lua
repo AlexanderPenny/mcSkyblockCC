@@ -56,14 +56,24 @@ local function drawScreen()
     writeCentered("Richest Gamblers", 1)
 
     leaderboard.setTextScale(2)
-
+    local pos={0,0,0}
+    local temp=1
+    for i=1,#leaderboardArray[2]-1 do
+        if leaderboardArray[2][i]>leaderboardArray[2][i+1] and pos[3]==0 then
+            pos[temp]=i
+            temp=temp+1
+        end
+        if i==#leaderboardArray[2]-1 and pos[3]==0 then
+            pos[3]=#leaderboardArray[2]
+        end
+    end
     --leaderboard.setTextScale(3)
     for i = 1, n do
-        if i == 1 then
+        if i <= pos[1] then
             leaderboard.setTextColor(colors.red)
-        elseif i == 2 then
+        elseif i <= pos[2] then
             leaderboard.setTextColor(colors.orange)
-        elseif i == 3 then
+        elseif i <= pos[3] then
             leaderboard.setTextColor(colors.yellow)
         else
             leaderboard.setTextColor(colors.black)
