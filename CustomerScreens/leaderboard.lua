@@ -37,23 +37,39 @@ local function bubbleSort()
     until not swapped
 end
 
+local function writeCentered(text, line)
+    local width, _ = leaderboard.getSize()
+    local x = math.floor((width - #text) / 2 + 1)
+    leaderboard.setCursorPos(x, line)
+    leaderboard.write(text)
+end
+
 local function drawScreen()
     --initialise
     leaderboard.clear()
     local n = #leaderboardArray[1]
 
-    leaderboard.setBackgroundColour(colors.black)
+    leaderboard.setBackgroundColour(colors.lightGray)
+    leaderboard.setTextColor(colors.black)
+
     leaderboard.setCursorPos(1,1)
+    writeCentered("Richest Gamblers", 1)
 
     leaderboard.setTextScale(2)
-    leaderboard.write("Richest Gamblers")
 
     --leaderboard.setTextScale(3)
     for i = 1, n do
-        leaderboard.setCursorPos(1, i+2)
-        leaderboard.write(leaderboardArray[3][i] .. ": " .. leaderboardArray[2][i])
+        if i == 1 then
+            leaderboard.setTextColor(colors.red)
+        elseif i == 2 then
+            leaderboard.setTextColor(colors.orange)
+        elseif i == 3 then
+            leaderboard.setTextColor(colors.yellow)
+        else
+            leaderboard.setTextColor(colors.black)
+        end
+        writeCentered(leaderboardArray[3][i] .. ": " .. leaderboardArray[2][i], i+2)
     end
-
 end
 
 -------------main loop-------------
