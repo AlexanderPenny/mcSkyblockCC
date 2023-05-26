@@ -7,10 +7,18 @@ while run do
     if protocol=="Read" then
         local dataFile=fs.open("/Data/"..message..".txt","r")
         print("/Data/"..message..".txt")
-        rednet.send(id,dataFile.readLine())
+        local val=dataFile.readLine()
+        print("Sending value "..val.." to "..id)
+        rednet.send(id,val)
         dataFile.close()
-    else -- Write -- currently non functional
-        dataFile=fs.open("/Data/"..message,"w")
-        dataFile.writeLine()
+    elseif protocol=="Write" then
+        dataFile=fs.open("/Data/"..string.sub(message,1,6)..".txt","w")
+        dataFile.write(string.sub(message,8,message:len()))
+        dataFile.close()
+        print()
+        print("Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
+        rednet.send(id,"Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
+    else
+        rednet.send(id,"Invalid Protocol used in Network")
     end
 end

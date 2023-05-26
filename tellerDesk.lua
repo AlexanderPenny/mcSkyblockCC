@@ -1,0 +1,7 @@
+rednet.open("right")
+print("Enter in format CHECKSUM:VALUE to provide a new value for the matching account")
+rednet.send(5,read(),"Write")
+local id,message=rednet.receive()
+print(message)
+os.sleep(3)
+os.shutdown()
