@@ -90,7 +90,7 @@ readFromFiles()
 bubbleSort()
 drawScreen()
 
--- polls every 15 minutes to be low-performance impacting
-os.sleep(900)
+-- polls every 30 minutes to be low-performance impacting
+os.sleep(1800)
 
 end
