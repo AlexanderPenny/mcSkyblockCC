@@ -1,3 +1,16 @@
+local function getChecksum(message)
+        local dataFile=fs.open("/Data/info.txt","r")
+        for line in dataFile.readLine do 
+            print(line:sub(line:find("-"),line:len()))
+            if message==line:sub(line:find("-")+1,line:len()) then
+                dataFile.close()
+                return line:sub(0,line:find("-")-1)
+            end
+        end
+        dataFile.close()
+        return("Invalid Checksum")
+end
+
 local run=true
 rednet.open("top")
 while run do
@@ -18,6 +31,8 @@ while run do
         print()
         print("Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
         rednet.send(id,"Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
+    elseif protocol=="getChecksum" then
+        rednet.send(id,getChecksum(message))
     else
         rednet.send(id,"Invalid Protocol used in Network")
     end
