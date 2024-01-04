@@ -1,7 +1,6 @@
 local function getChecksum(message)
         local dataFile=fs.open("/Data/info.txt","r")
         for line in dataFile.readLine do 
-            print(line:sub(line:find("-"),line:len()))
             if message==line:sub(line:find("-")+1,line:len()) then
                 dataFile.close()
                 return line:sub(0,line:find("-")-1)
