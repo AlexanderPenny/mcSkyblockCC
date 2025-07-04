@@ -12,7 +12,7 @@ local function getChecksum(message)
         return("Invalid Checksum")
 end
  
-local function writeValue(id,message)
+local function writeValue(id,message) --MAKE ID CHECKS SO CAN ONLY BE DONE BY VERIFIED OFFICIAL BANK COMPS
     dataFile=fs.open("/Data/"..string.sub(message,1,6)..".txt","w")
     dataFile.write(string.sub(message,8,message:len()))
     dataFile.close()
@@ -40,6 +40,37 @@ local function updateValue(id,message)
     rednet.send(id,("Successfully updated Account with checksum "..string.sub(message,1,6).." incremented value by "..string.sub(message,8,message:len())))
     dataFile.close()
 end
+
+local function transaction(id,message)
+    --transactingFromChecksum:transactingToChecksum:Value 
+    local dataFile=fs.open("/Data/"..string.sub(message,1,6)..".txt","r")
+    local losingAccountValue=tonumber(dataFile.readLine())
+    dataFile.close()
+    transactionValue=tonumber(string.sub(message,15,message:len()))
+    print("losing "..losingAccountValue.." transacting "..transactionValue)
+    if transactionValue<0 then
+        print("Sending value must be greater than or equal to 0")
+        rednet.send(id,"Sending value must be greater than or equal to 0")
+    else
+        if losingAccountValue<transactionValue then
+            print("Insufficient funds")
+            rednet.send(id,"Insufficient funds")
+        else
+            local dataFile=fs.open("/Data/"..string.sub(message,1,6)..".txt","w")
+            dataFile.write(losingAccountValue-transactionValue)
+            dataFile.close()
+        end
+        
+        local dataFile=fs.open("/Data/"..string.sub(message,8,13)..".txt","r")
+        local gainingAccountValue=tonumber(dataFile.readLine())
+        dataFile.close()
+        local dataFile=fs.open("/Data/"..string.sub(message,8,13)..".txt","w")
+        dataFile.write(gainingAccountValue+transactionValue)
+        dataFile.close()
+        print("Successfully completed transaction with Accounts with checksums "..string.sub(message,1,6).." and "..string.sub(message,8,13)..", transaction value "..transactionValue)
+        rednet.send(id,"Successfully completed transaction of "..transactionValue)
+    end
+end
  
 --main loop below
  
@@ -55,6 +86,8 @@ while run do
         writeValue(id,message)
     elseif protocol=="Update" then
         updateValue(id,message)
+    elseif protocol=="Transaction" then
+        transaction(id,message)
     elseif protocol=="getChecksum" then
         rednet.send(id,getChecksum(message))
     else
