@@ -71,11 +71,34 @@ local function transaction(id,message)
         rednet.send(id,"Successfully completed transaction of "..transactionValue)
     end
 end
+
+local function register(id,message)
+    --message=checksum
+    --currently needs you to manually delete empty line after first registeration
+    local dataFile=fs.open("/Data/registeredComputers.txt","r")
+    local validRegister=true
+    local val=dataFile.readLine()
+    while val~=nil and validRegister==true do
+        if tonumber(string.sub(val,1,val:len()-7))==id then
+            print("Computer already has a registered account")
+            rednet.send(id,"Computer already has a registered account")
+            validRegister=false
+        end
+        val=dataFile.readLine()
+    end
+    dataFile.close()
+    if validRegister then
+        local dataFile=fs.open("/Data/registeredComputers.txt","a")
+        dataFile.write(id..":"..message.."\n")
+        dataFile.close()
+    end
+end
  
 --main loop below
  
 local run=true
 rednet.open("top")
+rednet.open("left")
 while run do
     print("Waiting For Query")
     local id,message,protocol=rednet.receive()
@@ -88,6 +111,8 @@ while run do
         updateValue(id,message)
     elseif protocol=="Transaction" then
         transaction(id,message)
+    elseif protocol=="Register" then
+        register(id,message)
     elseif protocol=="getChecksum" then
         rednet.send(id,getChecksum(message))
     else
