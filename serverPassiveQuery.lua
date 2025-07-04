@@ -1,3 +1,32 @@
+--function definitions
+
+local function getOwnerChecksum(id)
+    --returns checksum that owns id
+    local dataFile=fs.open("/Data/registeredComputers.txt","r")
+    local val=dataFile.readLine()
+    local found=false
+    local data=nil
+    while val~=nil and found==false do
+        if tonumber(string.sub(val,1,val:len()-7))==id then
+            found=true
+            data=val
+            string.sub(data,data:len()-5,data:len())
+        end
+        val=dataFile.readLine()
+    end
+    if found then
+        return string.sub(data,data:len()-5,data:len())
+    else
+        return -1
+    end
+    dataFile.close()
+
+
+
+
+    return checksum
+end
+
 --protocol defininitons
  
 local function getChecksum(message)
@@ -13,12 +42,19 @@ local function getChecksum(message)
 end
  
 local function writeValue(id,message) --MAKE ID CHECKS SO CAN ONLY BE DONE BY VERIFIED OFFICIAL BANK COMPS
-    dataFile=fs.open("/Data/"..string.sub(message,1,6)..".txt","w")
-    dataFile.write(string.sub(message,8,message:len()))
-    dataFile.close()
-    print()
-    print("Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
-    rednet.send(id,"Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
+    --banks main account checksum
+    if "UiQ83O"==getOwnerChecksum(id) then
+        dataFile=fs.open("/Data/"..string.sub(message,1,6)..".txt","w")
+        dataFile.write(string.sub(message,8,message:len()))
+        dataFile.close()
+        print()
+        print("Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
+        rednet.send(id,"Successfully updated Account with checksum "..string.sub(message,1,6).." to value "..string.sub(message,8,message:len()))
+    else
+        print("Computer of id "..id.." is not authorised to use this protocol")
+        rednet.send(id,"Computer of id "..id.." is not authorised to use this protocol")
+    end
+    
 end
  
 local function readValue(id,message)
@@ -95,7 +131,7 @@ local function register(id,message)
 end
  
 --main loop below
- 
+
 local run=true
 rednet.open("top")
 rednet.open("left")
