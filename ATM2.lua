@@ -1,3 +1,9 @@
+-- --------------------------
+-- Copyright (c) 2026 Alexander L. Penny & Struan D. A. Dundas
+-- Licensed under the MIT License - see LICENSE file for details
+-- Project Link - https://github.com/AlexanderPenny/mcSkyblockCC
+-- --------------------------
+
 ----------------------other variables----------------------
 local menuMode = 0
 -- 0 = main menu, 1 = withdraw money, 2 = deposit money

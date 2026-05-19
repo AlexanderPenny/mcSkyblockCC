@@ -1,3 +1,9 @@
+-- --------------------------
+-- Copyright (c) 2026 Alexander L. Penny & Struan D. A. Dundas
+-- Licensed under the MIT License - see LICENSE file for details
+-- Project Link - https://github.com/AlexanderPenny/mcSkyblockCC
+-- --------------------------
+
 local run=true
 local i=0
 local xSize, ySize = term.getSize()

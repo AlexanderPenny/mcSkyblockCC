@@ -1,3 +1,9 @@
+-- --------------------------
+-- Copyright (c) 2026 Alexander L. Penny & Struan D. A. Dundas
+-- Licensed under the MIT License - see LICENSE file for details
+-- Project Link - https://github.com/AlexanderPenny/mcSkyblockCC
+-- --------------------------
+
 local screenSizeX,screenSizeY=term.getSize()
 local run=true
 while run do
